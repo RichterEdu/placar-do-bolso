@@ -176,7 +176,16 @@ h1 {
   background: var(--lula); color: #fff; padding: 2px 8px;
   font-size: 0.75rem; font-weight: 900; font-stretch: 80%; text-transform: uppercase; letter-spacing: 0.06em;
 }
-.destaques strong { display: block; font-size: 2.8rem; font-weight: 900; line-height: 1; color: var(--bom); }
+.destaques .dest-titulo {
+  display: block; font-style: normal; font-size: 1.15rem; font-weight: 900; font-stretch: 80%;
+  text-transform: uppercase; line-height: 1.1; color: var(--tinta); margin-bottom: 4px;
+}
+.destaques strong {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 2.6rem; font-weight: 900; line-height: 1; color: var(--bom);
+}
+.destaques .seta { font-size: 0.55em; display: inline-block; margin: 0; }
+.destaques strong .seta { display: inline-block; font-size: 1.5rem; margin-top: 0; color: var(--bom); }
 .destaques span { display: block; font-size: 0.9375rem; margin-top: 6px; color: var(--tinta-2); }
 .destaques .ref { color: var(--tinta-3); }
 
@@ -468,6 +477,8 @@ h2 {
   .hero > * { grid-column: 1; }
   .hero > .destaques { grid-column: 2; grid-row: 1 / span 6; align-self: start; margin-top: 34px; }
   h1 { font-size: clamp(3.4rem, 5.6vw, 5.2rem); }
+  .hero > .destaques strong { font-size: 2.15rem; }
+  .hero > .destaques .dest-titulo { font-size: 1.05rem; }
 
   /* Cada comparação vira uma linha de placar: Bolsonaro | tema | Lula */
   .cards { grid-template-columns: minmax(0, 1fr); gap: 0; border-top: 2px solid var(--tinta); }
