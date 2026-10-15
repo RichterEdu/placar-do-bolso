@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Molde da imagem de compartilhamento</title>
+<!-- Gera img/og.png (1200x630). Veja o README. -->
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  body {
+    background: #fff; color: #111;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    padding: 50px 64px 48px; display: flex; flex-direction: column; justify-content: space-between;
+    border-top: 14px solid; border-image: linear-gradient(90deg, #00843d 0 25%, #ffcc29 25% 50%, #d71920 50% 100%) 1;
+  }
+  .sobre { font-size: 26px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #4a4a47; }
+  h1 { font-size: 80px; line-height: 1.02; letter-spacing: -.02em; margin-top: 12px; }
+  .placar { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .lado { border-radius: 0 0 18px 18px; padding: 20px 26px; }
+  .b { background: #eef7f0; border-top: 12px solid #00843d; box-shadow: inset 0 6px 0 #ffcc29; }
+  .l { background: #fdeeee; border-top: 12px solid #d71920; }
+  .quem { font-size: 26px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; }
+  .b .quem { color: #006630; } .l .quem { color: #a3111a; }
+  .num { font-size: 64px; font-weight: 800; margin-top: 2px; }
+  .txt { font-size: 26px; color: #4a4a47; }
+  .rodape { font-size: 26px; color: #4a4a47; }
+  .rodape strong { color: #a3111a; }
+</style>
+</head>
+<body>
+  <div>
+    <p class="sobre">2º turno · 25 de outubro</p>
+    <h1>Lula x Bolsonaro:<br>o placar do seu bolso</h1>
+  </div>
+  <div class="placar">
+    <div class="lado b"><p class="quem">Bolsonaro · fim de 2022</p><p class="num">7,9%</p><p class="txt">de desemprego</p></div>
+    <div class="lado l"><p class="quem">Lula · fim de 2025</p><p class="num">5,1%</p><p class="txt">o menor desde 2012</p></div>
+  </div>
+  <p class="rodape"><strong>15 comparações com fonte oficial</strong> + calculadora: quanto a lei do Lula tira do seu IR</p>
+</body>
+</html>

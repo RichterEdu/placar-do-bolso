@@ -1,0 +1,510 @@
+/* Placar do Bolso — estilos.
+   Visual de placar de jornal: cantos retos, linhas pretas, tipografia condensada.
+   Celular: barra de abas embaixo e cards empilhados.
+   Desktop (>= 1024px): menu lateral fixo e cada comparação vira uma linha de placar.
+   Cores: Lula em vermelho e branco, Bolsonaro em verde e amarelo. */
+
+:root {
+  color-scheme: light;
+  --pagina: #ffffff;
+  --superficie-2: #f4f4f1;
+  --tinta: #111111;
+  --tinta-2: #45443f;
+  --tinta-3: #6b6a66;
+  --linha: #d9d8d2;
+  --base: #b9b8b0;
+
+  --lula: #d71920;
+  --lula-escuro: #a3111a;
+  --lula-claro: #fdeeee;
+
+  --bolsonaro: #00843d;
+  --bolsonaro-escuro: #006630;
+  --bolsonaro-amarelo: #ffcc29;
+  --bolsonaro-claro: #eef7f0;
+
+  /* "Melhorou": verde de status, diferente do verde da bandeira do Bolsonaro */
+  --bom: #0b7a34;
+  --bom-claro: #dff6e5;
+
+  --preencher: #ffe58a;
+  --largura: 1080px;
+  --altura-abas: 60px;
+  --fonte: "Archivo", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; border-radius: 0; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 64px; background: var(--pagina); }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  background: var(--pagina);
+  color: var(--tinta);
+  font-family: var(--fonte);
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Títulos e números: largura condensada, cara de placar */
+h1, h2, h3, .num, .quem, .sobretitulo, .destaques strong, .menu .marca,
+.abas, .mini-placar, .selo-lula, .calc-selo, .linha-tempo .quando, .resultado dd {
+  font-stretch: 75%;
+}
+
+a { color: inherit; text-underline-offset: 2px; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 3px solid var(--tinta); outline-offset: 2px; }
+
+.pular {
+  position: absolute; left: -999px; top: 8px;
+  background: var(--tinta); color: #fff; padding: 8px 12px; z-index: 100;
+}
+.pular:focus { left: 8px; }
+
+/* Faixa do topo: metade verde com filete amarelo (Bolsonaro), metade vermelha (Lula) */
+.faixa-topo {
+  height: 8px;
+  background:
+    linear-gradient(90deg, transparent 50%, var(--lula) 50%),
+    linear-gradient(var(--bolsonaro) 0 62%, var(--bolsonaro-amarelo) 62% 100%);
+}
+
+/* =========================================================
+   CABEÇALHO (celular: barra fina no topo)
+   ========================================================= */
+.topo {
+  position: sticky; top: 0; z-index: 50;
+  background: #fff;
+  border-bottom: 2px solid var(--tinta);
+}
+.menu {
+  max-width: var(--largura); margin: 0 auto;
+  display: flex; align-items: center; gap: 4px;
+  padding: 10px 16px;
+}
+.menu a {
+  flex: none; text-decoration: none; font-size: 0.9375rem;
+  color: var(--tinta-2); padding: 6px 10px; white-space: nowrap;
+}
+.menu .marca {
+  font-weight: 900; font-size: 1.25rem; text-transform: uppercase; letter-spacing: 0.01em;
+  color: var(--tinta); padding-left: 0;
+}
+/* No celular, as seções ficam na barra de abas; no topo só a marca e as fontes */
+.menu a:not(.marca):not([href="#fontes"]) { display: none; }
+.menu a[href="#fontes"] {
+  margin-left: auto; font-weight: 700; font-size: 0.8125rem; text-transform: uppercase;
+  border: 2px solid var(--tinta); padding: 4px 10px; color: var(--tinta);
+}
+.lateral-extra { display: none; }
+
+/* Barra de abas fixa embaixo (só celular/tablet) */
+.abas {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 55;
+  display: grid; grid-template-columns: repeat(6, minmax(0, 1fr));
+  background: #fff; border-top: 2px solid var(--tinta);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.abas a {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
+  min-height: var(--altura-abas); padding: 6px 2px;
+  text-decoration: none; color: var(--tinta-2);
+  font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em;
+  border-top: 4px solid transparent; margin-top: -2px;
+}
+.abas a b { font-size: 1.05rem; font-weight: 900; color: var(--tinta-3); line-height: 1; }
+.abas a[aria-current="true"] { color: var(--tinta); border-top-color: var(--tinta); background: var(--superficie-2); }
+.abas a[aria-current="true"] b { color: var(--tinta); }
+.abas a.aba-lula { color: var(--lula); }
+.abas a.aba-lula b { color: var(--lula); }
+.abas a.aba-lula[aria-current="true"] { border-top-color: var(--lula); background: var(--lula-claro); }
+
+body { padding-bottom: calc(var(--altura-abas) + env(safe-area-inset-bottom)); }
+
+/* =========================================================
+   CONTEÚDO
+   ========================================================= */
+main { max-width: var(--largura); margin: 0 auto; padding: 0 16px; counter-reset: secao; }
+
+.hero { padding: 28px 0 8px; }
+.sobretitulo {
+  margin: 0 0 10px; font-size: 0.9375rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--tinta); border-left: 6px solid var(--lula); padding-left: 10px;
+}
+h1 {
+  font-size: clamp(2.6rem, 11vw, 5rem); font-weight: 900; line-height: 0.95; letter-spacing: -0.01em;
+  text-transform: uppercase; margin: 0 0 16px; max-width: 14ch;
+}
+.lede { font-size: 1.1875rem; color: var(--tinta-2); max-width: 62ch; margin: 0 0 20px; }
+.lede strong { color: var(--tinta); }
+
+.legenda-gov { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 20px; }
+.vs-mini { font-weight: 900; color: var(--tinta-3); }
+
+.chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 0.875rem; font-weight: 700; color: var(--tinta);
+  border: 2px solid var(--cor-chip); padding: 3px 10px 3px 6px;
+}
+.chip::before { content: ""; width: 14px; height: 14px; flex: none; }
+.chip.bolsonaro { --cor-chip: var(--bolsonaro); background: var(--bolsonaro-claro); }
+.chip.bolsonaro::before { background: linear-gradient(var(--bolsonaro-amarelo) 0 35%, var(--bolsonaro) 35% 100%); }
+.chip.lula { --cor-chip: var(--lula); background: var(--lula-claro); }
+.chip.lula::before { background: var(--lula); }
+
+/* Destaques: carrossel de deslizar no celular, grade no desktop */
+.destaques {
+  list-style: none; padding: 0 16px; margin: 0 -16px 20px;
+  display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.destaques::-webkit-scrollbar { display: none; }
+.destaques li {
+  flex: 0 0 74%; scroll-snap-align: start;
+  background: var(--lula); color: #fff; padding: 16px;
+}
+.destaques strong { display: block; font-size: 2.6rem; font-weight: 900; line-height: 1; }
+.destaques span { display: block; font-size: 0.9375rem; margin-top: 6px; }
+.destaques .ref { color: rgba(255, 255, 255, 0.85); }
+
+.placar-resumo { max-width: 62ch; margin: 0 0 16px; }
+
+.acoes { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 44px; padding: 10px 16px;
+  font: inherit; font-weight: 800; font-size: 0.9375rem; text-decoration: none; cursor: pointer;
+  border: 2px solid var(--tinta); text-transform: uppercase; letter-spacing: 0.02em;
+}
+.btn-zap { background: var(--tinta); color: #fff; }
+.btn-zap:hover { background: #000; }
+.btn-sec { background: #fff; color: var(--tinta); }
+.btn-sec:hover { background: var(--superficie-2); }
+.btn-lula { background: var(--lula); color: #fff; border-color: var(--lula); }
+.btn-lula:hover { background: var(--lula-escuro); border-color: var(--lula-escuro); }
+
+/* ---------- Seções numeradas ---------- */
+.secao { margin-top: 40px; padding-top: 14px; border-top: 3px solid var(--tinta); counter-increment: secao; }
+.secao > h2::before {
+  content: counter(secao, decimal-leading-zero);
+  display: block; font-size: 1rem; font-weight: 800; color: var(--tinta-3); letter-spacing: 0.08em; margin-bottom: 2px;
+}
+#metodo { counter-increment: none; }
+#metodo > h2::before { content: none; }
+h2 {
+  font-size: clamp(2rem, 7vw, 3rem); font-weight: 900; line-height: 1; text-transform: uppercase; margin: 0 0 10px;
+}
+.intro { color: var(--tinta-2); max-width: 62ch; margin: 0 0 20px; }
+
+/* ---------- Cards (celular: empilhados) ---------- */
+.cards { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
+
+.card {
+  background: #fff; border: 2px solid var(--tinta);
+  padding: 16px; display: flex; flex-direction: column; gap: 12px;
+  scroll-margin-top: 72px;
+}
+.card:target { outline: 4px solid var(--preencher); outline-offset: 0; }
+.card h3 { margin: 0; font-size: 1.5rem; font-weight: 900; line-height: 1.1; text-transform: uppercase; }
+.card p { margin: 0; }
+
+.vs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; }
+.lado { padding: 0 12px 12px; min-width: 0; }
+.lado.bolsonaro {
+  background: var(--bolsonaro-claro);
+  border-top: 6px solid var(--bolsonaro);
+  box-shadow: inset 0 3px 0 var(--bolsonaro-amarelo);
+}
+.lado.lula { background: var(--lula-claro); border-top: 6px solid var(--lula); }
+.quem { display: block; padding-top: 10px; font-size: 0.875rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.06em; }
+.bolsonaro .quem { color: var(--bolsonaro-escuro); }
+.lula .quem { color: var(--lula-escuro); }
+.num {
+  display: block; font-size: clamp(1.8rem, 8vw, 2.4rem); line-height: 1; font-weight: 900;
+  margin: 6px 0 8px; overflow-wrap: break-word; hyphens: manual;
+}
+/* Número de uma conquista: verde, para ler como "coisa boa" à primeira vista */
+.num-bom { color: var(--bom); }
+
+/* Etiqueta de variação: subiu (verde clarinho) ou caiu (cinza) */
+.var {
+  display: inline-block; margin: 0 0 8px; padding: 3px 8px;
+  font-size: 0.875rem; font-weight: 800; font-stretch: 85%; letter-spacing: 0.01em;
+}
+.var-sobe { background: var(--bom-claro); color: var(--bom); border: 2px solid var(--bom); }
+.var-desce { background: #e9e9e6; color: #3d3c38; border: 2px solid #8a8983; }
+.lado p { font-size: 0.9375rem; color: var(--tinta-2); }
+
+.nota { font-size: 0.875rem; color: var(--tinta-3); }
+.nota a:not(.ref) { font-weight: 800; color: var(--tinta); }
+
+.ref {
+  font-size: 0.75em; font-weight: 600; color: var(--tinta-3); text-decoration: none; white-space: nowrap;
+  vertical-align: 0.15em;
+}
+.ref:hover { color: var(--tinta); text-decoration: underline; }
+
+.card-acoes { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; padding-top: 4px; }
+.card-acoes .btn { min-height: 40px; padding: 6px 12px; font-size: 0.8125rem; }
+
+/* ---------- Gráficos de barras ---------- */
+.grafico { margin: 4px 0 0; }
+.grafico figcaption { font-size: 0.875rem; font-weight: 800; color: var(--tinta-2); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.03em; }
+.grafico .leg { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+.grafico .leg .chip { font-size: 0.75rem; padding: 1px 8px 1px 4px; }
+.barras {
+  height: 170px; display: flex; align-items: flex-end; gap: 2px;
+  border-bottom: 2px solid var(--tinta);
+  padding-top: 26px; margin-bottom: 26px;
+}
+.barra {
+  position: relative; flex: 1 1 0; min-width: 0;
+  height: calc(var(--v) / var(--max) * 100%);
+}
+.barra.bolsonaro { background: var(--bolsonaro); border-top: 4px solid var(--bolsonaro-amarelo); }
+.barra.lula { background: var(--lula); }
+.barra .valor, .barra .ano {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  font-size: 0.75rem; white-space: nowrap; font-variant-numeric: tabular-nums;
+}
+.barra .valor { bottom: calc(100% + 4px); font-weight: 800; color: var(--tinta); }
+.barra.bolsonaro .valor { bottom: calc(100% + 8px); }
+.barra .ano { top: calc(100% + 6px); color: var(--tinta-3); }
+@media (min-width: 560px) { .barra .valor, .barra .ano { font-size: 0.8125rem; } }
+
+/* Barras crescem quando aparecem na tela (só com JS e sem "reduzir movimento") */
+.js .barra { transition: height 0.8s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.js .barras:not(.visivel) .barra { height: 0; }
+.js .barras:not(.visivel) .valor { opacity: 0; }
+.js .barra .valor { transition: opacity 0.3s 0.6s; }
+@media (prefers-reduced-motion: reduce) {
+  .js .barra, .js .barra .valor { transition: none; }
+}
+
+/* ---------- Lei do Lula / calculadora ---------- */
+.destaque-secao {
+  background: var(--lula-claro); border-top-color: var(--lula);
+  padding: 20px 16px 24px; margin-left: -16px; margin-right: -16px;
+}
+.selo-lula {
+  display: inline-block; margin: 0 0 12px;
+  background: var(--lula); color: #fff; font-weight: 900; font-size: 1rem;
+  letter-spacing: 0.05em; text-transform: uppercase; padding: 6px 12px;
+}
+.destaque-secao > h2 { color: var(--lula-escuro); }
+.destaque-secao > h2::before { color: var(--lula); }
+
+.linha-tempo { list-style: none; padding: 0; margin: 0 0 24px; display: grid; gap: 0; max-width: 720px; border-top: 2px solid var(--tinta); }
+.linha-tempo li {
+  display: grid; grid-template-columns: 6.5rem 1fr; gap: 10px; align-items: start;
+  background: #fff; padding: 12px; border-bottom: 1px solid var(--linha); border-left: 8px solid var(--cor-borda);
+}
+.linha-tempo li.bolsonaro { --cor-borda: var(--bolsonaro); box-shadow: inset 4px 0 0 var(--bolsonaro-amarelo); }
+.linha-tempo li.lula { --cor-borda: var(--lula); }
+.linha-tempo .quando { font-weight: 900; font-size: 1.125rem; line-height: 1.3; }
+.linha-tempo li.bolsonaro .quando { color: var(--bolsonaro-escuro); }
+.linha-tempo li.lula .quando { color: var(--lula-escuro); }
+.linha-tempo li.lula:last-child { background: var(--lula); color: #fff; border-left-color: var(--lula-escuro); }
+.linha-tempo li.lula:last-child .quando,
+.linha-tempo li.lula:last-child .ref { color: #fff; }
+
+.subtitulo { font-size: clamp(1.5rem, 5vw, 2rem); font-weight: 900; text-transform: uppercase; line-height: 1.05; margin: 8px 0 8px; }
+
+.comparacao-aliquota { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; margin: 0 0 20px; border: 2px solid var(--tinta); }
+.comparacao-aliquota > div { background: #fff; padding: 14px; }
+.comparacao-aliquota > div + div { border-left: 2px solid var(--tinta); }
+.comparacao-aliquota p { margin: 0; font-size: 0.9375rem; color: var(--tinta-2); }
+
+.calculadora {
+  background: #fff; border: 3px solid var(--lula);
+  display: flex; flex-direction: column; max-width: 680px;
+}
+.calc-topo { background: var(--lula); color: #fff; padding: 14px 18px; }
+.calc-topo .calc-selo { display: block; font-size: 0.875rem; font-weight: 900; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.92; }
+.calc-topo h3 { margin: 2px 0 0; font-size: 1.75rem; font-weight: 900; line-height: 1.05; text-transform: uppercase; }
+.calc-corpo { padding: 14px 18px 18px; display: flex; flex-direction: column; gap: 10px; }
+.calculadora label { font-weight: 800; font-size: 0.9375rem; }
+.campo { display: flex; align-items: center; gap: 8px; border: 2px solid var(--tinta); padding: 0 12px; background: #fff; }
+.campo:focus-within { border-color: var(--lula); box-shadow: 0 0 0 2px var(--lula); }
+.campo span { font-weight: 800; color: var(--tinta-2); }
+.campo input {
+  flex: 1; min-width: 0; border: 0; background: transparent; color: var(--tinta);
+  font: inherit; font-size: 1.5rem; font-weight: 800; padding: 10px 0; outline: none;
+}
+.atalhos { display: flex; flex-wrap: wrap; gap: 6px; }
+.atalhos button {
+  font: inherit; font-size: 0.875rem; font-weight: 700; cursor: pointer; min-height: 36px;
+  background: #fff; color: var(--tinta); border: 2px solid var(--linha); padding: 4px 10px;
+}
+.atalhos button:hover { border-color: var(--lula); }
+
+.resultado { display: flex; flex-direction: column; gap: 10px; }
+.resultado dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; margin: 6px 0 0; border: 2px solid var(--tinta); }
+.resultado dl > div { background: #fff; padding: 10px 12px; }
+.resultado dl > div:nth-child(odd) { border-right: 2px solid var(--tinta); }
+.resultado dl > div:nth-child(-n+2) { border-bottom: 2px solid var(--tinta); }
+.resultado dt { font-size: 0.8125rem; color: var(--tinta-2); }
+.resultado dd { margin: 2px 0 0; font-size: 1.6rem; font-weight: 900; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.resultado .economia { background: var(--lula); }
+.resultado .economia dt { color: #fff; }
+.resultado .economia dd { color: #fff; }
+.mensagem { margin: 0; font-weight: 700; }
+.credito { margin: 0; padding: 12px 14px; background: var(--lula-claro); border-left: 8px solid var(--lula); font-size: 0.9375rem; }
+.credito strong { color: var(--lula-escuro); }
+
+.lista-ganhos { margin: 20px 0 0; padding-left: 20px; max-width: 70ch; }
+.lista-ganhos li { margin-bottom: 6px; }
+
+/* ---------- Flávio ---------- */
+.card.fato { border-color: var(--tinta); border-left: 10px solid var(--bolsonaro); box-shadow: inset 4px 0 0 var(--bolsonaro-amarelo); }
+.fato p { color: var(--tinta-2); }
+
+/* ---------- Mas e…? ---------- */
+.faq { display: flex; flex-direction: column; gap: 0; max-width: 760px; border-top: 2px solid var(--tinta); }
+.faq details { background: #fff; border-bottom: 2px solid var(--tinta); padding: 0 4px; }
+.faq summary { cursor: pointer; font-weight: 800; font-size: 1.125rem; padding: 14px 0; }
+.faq details[open] summary { color: var(--lula-escuro); }
+.faq details p { margin: 0 0 16px; color: var(--tinta-2); }
+
+.metodo { padding-left: 20px; max-width: 70ch; color: var(--tinta-2); }
+.metodo li { margin-bottom: 6px; }
+
+.fontes { padding-left: 28px; font-size: 0.875rem; color: var(--tinta-2); }
+.fontes li { margin-bottom: 6px; overflow-wrap: anywhere; scroll-margin-top: 72px; }
+.fontes li:target { background: var(--preencher); }
+
+/* ---------- Rodapé ---------- */
+.rodape {
+  max-width: var(--largura); margin: 40px auto 0; padding: 20px 16px 32px;
+  border-top: 3px solid var(--tinta); font-size: 0.9375rem; color: var(--tinta-2);
+}
+.rodape p { margin: 0 0 8px; }
+.preencher { background: var(--preencher); color: var(--tinta); padding: 0 4px; }
+
+.aviso {
+  position: fixed; left: 50%; bottom: calc(var(--altura-abas) + 16px); transform: translateX(-50%); z-index: 60;
+  background: var(--tinta); color: #fff; padding: 10px 16px;
+  font-weight: 800; font-size: 0.9375rem;
+}
+
+/* =========================================================
+   TABLET (640px+): cards em duas colunas
+   ========================================================= */
+@media (min-width: 640px) {
+  .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .card-largo { grid-column: 1 / -1; }
+  .destaques { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); overflow: visible; margin: 0 0 20px; padding: 0; }
+  .destaque-secao { margin-left: 0; margin-right: 0; padding: 24px 28px 28px; }
+}
+
+/* =========================================================
+   DESKTOP (1024px+): menu lateral fixo + linhas de placar
+   ========================================================= */
+@media (min-width: 1024px) {
+  body {
+    display: grid; grid-template-columns: 272px minmax(0, 1fr);
+    padding-bottom: 0;
+  }
+  .abas { display: none; }
+  .aviso { bottom: 24px; }
+
+  /* Menu lateral */
+  .topo {
+    grid-column: 1; grid-row: 1 / span 2;
+    position: sticky; top: 0; align-self: start; height: 100vh;
+    border-bottom: 0; border-right: 3px solid var(--tinta);
+    display: flex; flex-direction: column; overflow-y: auto;
+  }
+  .menu {
+    flex-direction: column; align-items: stretch; gap: 0;
+    padding: 20px 0 12px; margin: 0; counter-reset: item;
+  }
+  .menu .marca { font-size: 1.6rem; line-height: 1; padding: 0 20px 18px; margin: 0; border-bottom: 2px solid var(--tinta); }
+  .topo .menu a:not(.marca) {
+    display: flex; align-items: baseline; gap: 10px;
+    margin: 0; padding: 9px 20px; border: 0; border-left: 6px solid transparent;
+    font-size: 1rem; font-weight: 600; text-transform: none; color: var(--tinta-2);
+  }
+  .topo .menu a:not(.marca)::before {
+    counter-increment: item; content: counter(item, decimal-leading-zero);
+    font-weight: 900; font-stretch: 75%; color: var(--tinta-3); min-width: 1.4em;
+  }
+  .topo .menu a:not(.marca):hover { background: var(--superficie-2); color: var(--tinta); }
+  .topo .menu a[aria-current="true"]:not(.marca) { border-left-color: var(--tinta); background: var(--superficie-2); color: var(--tinta); font-weight: 800; }
+  .topo .menu a[aria-current="true"]:not(.marca)::before { color: var(--tinta); }
+  .topo .menu a.menu-lula:not(.marca) { color: var(--lula); font-weight: 800; }
+  .topo .menu a.menu-lula:not(.marca)::before { color: var(--lula); }
+  .topo .menu a.menu-lula[aria-current="true"]:not(.marca) { border-left-color: var(--lula); background: var(--lula-claro); color: var(--lula-escuro); }
+
+  .lateral-extra { display: block; margin-top: auto; padding: 16px 20px 24px; border-top: 2px solid var(--tinta); }
+  .mini-placar-titulo { margin: 0 0 6px; font-size: 0.8125rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--tinta-2); }
+  .mini-placar { display: grid; grid-template-columns: 1fr auto 1fr; align-items: stretch; border: 2px solid var(--tinta); margin-bottom: 8px; }
+  .mp-lado { display: flex; flex-direction: column; align-items: center; padding: 6px 4px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; }
+  .mp-lado strong { font-size: 2.4rem; line-height: 1; font-weight: 900; }
+  .mp-lula { background: var(--lula); color: #fff; }
+  .mp-bolsonaro { background: var(--bolsonaro-claro); color: var(--bolsonaro-escuro); border-top: 4px solid var(--bolsonaro-amarelo); }
+  .mp-x { display: flex; align-items: center; padding: 0 8px; font-weight: 900; font-size: 1.4rem; }
+  .mini-placar-nota { margin: 0 0 12px; font-size: 0.8125rem; color: var(--tinta-3); line-height: 1.35; }
+  .lateral-extra .btn { width: 100%; }
+
+  main { grid-column: 2; grid-row: 1; max-width: 1040px; width: 100%; margin: 0; padding: 0 48px; }
+  .rodape { grid-column: 2; grid-row: 2; max-width: 1040px; margin: 40px 48px 0; padding: 20px 0 40px; }
+
+  /* Topo: texto à esquerda, destaques à direita */
+  .hero { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); column-gap: 40px; padding-top: 48px; }
+  .hero > * { grid-column: 1; }
+  .hero > .destaques { grid-column: 2; grid-row: 1 / span 6; align-self: start; margin-top: 34px; }
+  h1 { font-size: clamp(3.4rem, 5.6vw, 5.2rem); }
+
+  /* Cada comparação vira uma linha de placar: Bolsonaro | tema | Lula */
+  .cards { grid-template-columns: minmax(0, 1fr); gap: 0; border-top: 2px solid var(--tinta); }
+  .cards > .card:not(.fato) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 210px minmax(0, 1fr);
+    grid-template-areas:
+      "bol tit lula"
+      "fig fig fig"
+      "nota nota nota"
+      "acoes acoes acoes";
+    row-gap: 14px; column-gap: 0;
+    border: 0; border-bottom: 2px solid var(--tinta);
+    padding: 26px 0;
+  }
+  .cards > .card:not(.fato) .vs { display: contents; }
+  .cards > .card:not(.fato) h3 {
+    grid-area: tit; align-self: center; text-align: center; padding: 0 18px; font-size: 1.75rem;
+  }
+  .cards > .card:not(.fato) h3::after {
+    content: "×"; display: block; margin-top: 6px; font-size: 2.2rem; line-height: 1; color: var(--tinta-3); font-weight: 900;
+  }
+  .cards > .card:not(.fato) .lado { padding: 0 20px 16px; }
+  .cards > .card:not(.fato) .lado.bolsonaro { grid-area: bol; text-align: right; }
+  .cards > .card:not(.fato) .lado.lula { grid-area: lula; }
+  .cards > .card:not(.fato) .num { font-size: 3.2rem; }
+  .cards > .card:not(.fato) .grafico { grid-area: fig; max-width: 760px; width: 100%; justify-self: center; margin-top: 8px; }
+  .cards > .card:not(.fato) > .nota { grid-area: nota; text-align: center; max-width: 72ch; justify-self: center; }
+  .cards > .card:not(.fato) .card-acoes { grid-area: acoes; justify-content: center; }
+  .card:target { outline-offset: -4px; }
+
+  /* Flávio: grade de fichas */
+  .cards.cards-lista { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; border-top: 0; }
+
+  /* Lei do Lula: linha do tempo ao lado do texto */
+  .destaque-secao { padding: 32px 40px 36px; }
+  .barras { height: 200px; }
+}
+
+@media (min-width: 1400px) {
+  .cards.cards-lista { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media print {
+  .topo, .abas, .card-acoes, .acoes, .calculadora, .aviso { display: none !important; }
+  body { display: block; padding: 0; }
+  .card { break-inside: avoid; }
+}
