@@ -305,6 +305,29 @@ h2 {
   .js .barra, .js .barra .valor { transition: none; }
 }
 
+/* ---------- Promessas: barra empilhada cumpriu / em parte / não cumpriu ----------
+   Cores de status, não de candidato: verde "bom", âmbar e cinza (o vermelho é do Lula). */
+.p-cumpriu { --cor-p: var(--bom); --tinta-p: #fff; }
+.p-parte { --cor-p: #f0a92e; --tinta-p: var(--tinta); }
+.p-nao { --cor-p: #5f5e59; --tinta-p: #fff; }
+
+.pilha-leg { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-bottom: 12px; font-size: 0.8125rem; font-weight: 700; color: var(--tinta-2); }
+.pilha-leg span { display: inline-flex; align-items: center; gap: 6px; }
+.pilha-leg span::before { content: ""; width: 14px; height: 14px; background: var(--cor-p); }
+
+.pilha-linha { margin-bottom: 14px; }
+.pilha-linha .quem { padding: 0 0 4px; font-size: 0.8125rem; }
+.pilha-linha.bolsonaro .quem { color: var(--bolsonaro-escuro); }
+.pilha-linha.lula .quem { color: var(--lula-escuro); }
+.pilha { display: flex; height: 44px; border: 2px solid var(--tinta); }
+.pilha span {
+  flex: var(--n) 1 0%; min-width: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--cor-p); color: var(--tinta-p);
+  font-size: 1.25rem; font-weight: 900; font-stretch: 75%; font-variant-numeric: tabular-nums;
+}
+.pilha span + span { border-left: 2px solid #fff; }
+
 /* ---------- Lei do Lula / calculadora ---------- */
 .destaque-secao {
   background: var(--lula-claro); border-top-color: var(--lula);
