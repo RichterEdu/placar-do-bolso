@@ -158,36 +158,38 @@ h1 {
 .chip.lula::before { background: var(--lula); }
 
 /* Destaques: carrossel de deslizar no celular, grade no desktop */
+/* Destaques: grade 2x2, os quatro sempre visíveis (nada de arrastar) */
 .destaques {
-  list-style: none; padding: 0 16px; margin: 0 -16px 20px;
-  display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory;
-  scrollbar-width: none;
+  list-style: none; padding: 0; margin: 0 0 20px;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px;
 }
-.destaques::-webkit-scrollbar { display: none; }
 /* Cada destaque: assinatura vermelha do Lula + número verde de "boa notícia" */
 .destaques li {
-  flex: 0 0 74%; scroll-snap-align: start;
-  background: #fff; color: var(--tinta);
-  border: 2px solid var(--tinta); border-top: 8px solid var(--lula);
-  padding: 12px 16px 16px;
+  background: #fff; color: var(--tinta); min-width: 0;
+  border: 2px solid var(--tinta); border-top: 6px solid var(--lula);
+  padding: 8px 10px 12px;
 }
 .destaques li::before {
-  content: "Governo Lula"; display: inline-block; margin-bottom: 8px;
-  background: var(--lula); color: #fff; padding: 2px 8px;
-  font-size: 0.75rem; font-weight: 900; font-stretch: 80%; text-transform: uppercase; letter-spacing: 0.06em;
+  content: "Governo Lula"; display: inline-block; margin-bottom: 6px;
+  background: var(--lula); color: #fff; padding: 1px 6px;
+  font-size: 0.6875rem; font-weight: 900; font-stretch: 80%; text-transform: uppercase; letter-spacing: 0.05em;
 }
 .destaques .dest-titulo {
-  display: block; font-style: normal; font-size: 1.15rem; font-weight: 900; font-stretch: 80%;
+  display: block; font-style: normal; font-size: 0.95rem; font-weight: 900; font-stretch: 80%;
   text-transform: uppercase; line-height: 1.1; color: var(--tinta); margin-bottom: 4px;
 }
 .destaques strong {
-  display: flex; align-items: center; gap: 6px;
-  font-size: 2.6rem; font-weight: 900; line-height: 1; color: var(--bom);
+  display: flex; align-items: center; flex-wrap: wrap; column-gap: 4px;
+  font-size: 1.75rem; font-weight: 900; line-height: 1.05; color: var(--bom);
 }
-.destaques .seta { font-size: 0.55em; display: inline-block; margin: 0; }
-.destaques strong .seta { display: inline-block; font-size: 1.5rem; margin-top: 0; color: var(--bom); }
-.destaques span { display: block; font-size: 0.9375rem; margin-top: 6px; color: var(--tinta-2); }
+.destaques strong .seta { display: inline-block; font-size: 1rem; margin: 0; color: var(--bom); }
+.destaques span { display: block; font-size: 0.8125rem; line-height: 1.35; margin-top: 4px; color: var(--tinta-2); }
 .destaques .ref { color: var(--tinta-3); }
+@media (min-width: 420px) {
+  .destaques strong { font-size: 2.1rem; }
+  .destaques .dest-titulo { font-size: 1.05rem; }
+  .destaques span { font-size: 0.875rem; }
+}
 
 .placar-resumo { max-width: 62ch; margin: 0 0 16px; }
 
@@ -415,7 +417,6 @@ h2 {
 @media (min-width: 640px) {
   .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .card-largo { grid-column: 1 / -1; }
-  .destaques { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); overflow: visible; margin: 0 0 20px; padding: 0; }
   .destaque-secao { margin-left: 0; margin-right: 0; padding: 24px 28px 28px; }
 }
 
