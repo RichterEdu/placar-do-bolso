@@ -49,3 +49,25 @@ test('o menu do site leva para a página de notícias', () => {
   assert.match(index, /<a class="menu-noticias[^"]*" href="noticias\.html">Notícias<\/a>/);
   assert.match(noticias, /<a class="menu-noticias[^"]*" href="noticias\.html" aria-current="page">Notícias<\/a>/);
 });
+
+test('o menu lateral e as abas da página de notícias apontam para seções dela e voltam ao placar', () => {
+  const ids = new Set([...noticias.matchAll(/\bid="([^"]+)"/g)].map(([, id]) => id));
+  for (const classe of ['menu', 'abas']) {
+    const nav = noticias.match(new RegExp(`<nav class="${classe}"[^>]*>([\\s\\S]*?)<\\/nav>`))?.[1];
+    assert.ok(nav, `falta o nav.${classe}`);
+    const ancoras = [...nav.matchAll(/href="#([^"]+)"/g)].map(([, id]) => id);
+    assert.ok(ancoras.length > 0, `nav.${classe} sem links para seções`);
+    for (const id of ancoras) assert.ok(ids.has(id), `nav.${classe} aponta para #${id}, que não existe`);
+    assert.match(nav, /href="index\.html"/, `nav.${classe} sem link de volta ao placar`);
+  }
+});
+
+test('index e notícias usam a mesma versão do CSS e do JS', () => {
+  for (const arquivo of ['css/style.css', 'js/main.js']) {
+    const padrao = new RegExp(`${arquivo.replace(/[./]/g, '\\$&')}\\?v=([\\w-]+)`);
+    const vIndex = index.match(padrao)?.[1];
+    const vNoticias = noticias.match(padrao)?.[1];
+    assert.ok(vIndex, `index.html sem ?v= em ${arquivo}`);
+    assert.equal(vNoticias, vIndex, `${arquivo}: versões diferentes`);
+  }
+});

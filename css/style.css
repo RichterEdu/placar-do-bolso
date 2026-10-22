@@ -113,10 +113,10 @@ a:hover { text-decoration-thickness: 2px; }
 /* Barra de cima com Notícias e Fontes: só no desktop (no celular elas ficam no .menu) */
 .barra-topo { display: none; }
 
-/* Barra de abas fixa embaixo (só celular/tablet) */
+/* Barra de abas fixa embaixo (só celular/tablet); colunas iguais para qualquer número de abas */
 .abas {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 55;
-  display: grid; grid-template-columns: repeat(6, minmax(0, 1fr));
+  display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr);
   background: #fff; border-top: 2px solid var(--tinta);
   padding-bottom: env(safe-area-inset-bottom);
 }
@@ -510,6 +510,9 @@ h2 {
   .topo .menu a.menu-lula:not(.marca) { color: var(--lula); font-weight: 800; }
   .topo .menu a.menu-lula:not(.marca)::before { color: var(--lula); }
   .topo .menu a.menu-lula[aria-current="true"]:not(.marca) { border-left-color: var(--lula); background: var(--lula-claro); color: var(--lula-escuro); }
+  /* Página de notícias: "Voltar ao placar" separado das seções, com seta em vez de número */
+  .topo .menu a.menu-voltar:not(.marca) { margin-top: 8px; border-top: 1px solid var(--linha); }
+  .topo .menu a.menu-voltar:not(.marca)::before { content: "←"; counter-increment: none; }
 
   .lateral-extra { display: block; margin-top: auto; padding: 16px 20px 24px; border-top: 2px solid var(--tinta); }
   .mini-placar-titulo { margin: 0 0 6px; font-size: 0.8125rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--tinta-2); }

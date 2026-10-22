@@ -36,6 +36,7 @@ node --test "tests/*.test.mjs"
 2. Troque o número no texto, no `data-resumo` (texto que vai para o WhatsApp) e, se houver gráfico, no `--v` e no `aria-label` da barra.
 3. Se a fonte mudar, atualize o item correspondente em `<ol class="fontes">`.
 4. Atualize a data no rodapé.
+5. Mudou o CSS ou o JS? Troque o `?v=` de `css/style.css` e `js/main.js` nos dois HTML (`index.html` e `noticias.html`), senão o navegador de quem já visitou continua com a versão antiga por até 4 horas.
 
 ## Adicionar uma notícia
 
