@@ -7,12 +7,14 @@ Site estático (HTML, CSS e JS puros, sem build) que compara, com fonte em cada 
 | Arquivo | O que é |
 |---|---|
 | `index.html` | Todo o conteúdo: cards, gráficos, seção do Flávio e lista de fontes |
+| `noticias.html` | Notícias recentes sobre o Flávio, cada uma com data, etiqueta, resposta dele e link para a matéria |
 | `css/style.css` | Visual, mobile-first, com modo escuro |
 | `js/ir.js` | Cálculo do IR (tabelas 2026 da Receita e do INSS, Lei 15.270/2025) |
 | `js/main.js` | Botões de WhatsApp e copiar link, e a calculadora |
 | `img/og.png` | Imagem que aparece ao compartilhar o link |
 | `og.html` | Molde usado para gerar `img/og.png` |
 | `tests/ir.test.mjs` | Testes da calculadora |
+| `tests/noticias.test.mjs` | Confere que toda notícia tem data, etiqueta, fonte e está em ordem |
 
 ## Rodar localmente
 
@@ -35,6 +37,13 @@ node --test "tests/*.test.mjs"
 3. Se a fonte mudar, atualize o item correspondente em `<ol class="fontes">`.
 4. Atualize a data no rodapé.
 
+## Adicionar uma notícia
+
+1. Copie um `<article class="card fato noticia">` do `noticias.html` e coloque na posição certa: da mais nova para a mais antiga.
+2. Preencha o `id`, o `data-resumo` (texto do WhatsApp), o `<time datetime="AAAA-MM-DD">`, a etiqueta (Investigação, Ação no TSE, Reportagem, Checagem, Decisão do TSE ou Fala dele), o texto, a resposta dele e a linha de fonte.
+3. Atualize a data no topo e no rodapé da página.
+4. Rode os testes: eles falham se faltar fonte, data ou etiqueta, ou se a ordem estiver errada.
+
 ## Regerar a imagem de compartilhamento
 
 Com o servidor local rodando:
@@ -47,4 +56,6 @@ Com o servidor local rodando:
 
 - Todo número tem link para a fonte, de preferência oficial (IBGE, Inpe, ANP, Receita, Senado, Banco Central).
 - Mesmo indicador e mesma fonte para os dois governos.
+- Nas notícias: só matéria de veículo identificado, nada de boato. Acusação é chamada de acusação, e a resposta do Flávio entra quando a matéria traz.
+- No dia da eleição é proibido publicar conteúdo novo (Lei 9.504/97, art. 39, §5º, IV). Atualize até a véspera.
 - O rodapé identifica o autor (Lei 9.504/97, art. 57-D: é proibido anonimato em manifestação eleitoral na internet). Pessoa física não pode pagar impulsionamento.

@@ -57,10 +57,11 @@ function montarBotoesDosCards() {
 
   document.querySelectorAll('[data-share-site]').forEach((botao) => {
     botao.addEventListener('click', () => {
-      abrirWhatsApp(
+      // Cada página pode trazer o próprio texto em <body data-compartilhar>.
+      const texto = document.body.dataset.compartilhar ||
         'Lula x Bolsonaro, número a número e com fonte oficial: salário, emprego, imposto, comida e saúde. ' +
-        'E dá pra calcular quanto você deixa de pagar de IR em 2026:\n\n' + urlDaPagina()
-      );
+        'E dá pra calcular quanto você deixa de pagar de IR em 2026:';
+      abrirWhatsApp(`${texto}\n\n${urlDaPagina()}`);
     });
   });
 }
