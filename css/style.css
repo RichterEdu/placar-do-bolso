@@ -95,13 +95,23 @@ a:hover { text-decoration-thickness: 2px; }
   font-weight: 900; font-size: 1.25rem; text-transform: uppercase; letter-spacing: 0.01em;
   color: var(--tinta); padding-left: 0;
 }
-/* No celular, as seções ficam na barra de abas; no topo só a marca e as fontes */
-.menu a:not(.marca):not([href="#fontes"]) { display: none; }
-.menu a[href="#fontes"] {
-  margin-left: auto; font-weight: 700; font-size: 0.8125rem; text-transform: uppercase;
-  border: 2px solid var(--tinta); padding: 4px 10px; color: var(--tinta);
+/* No celular, as seções ficam na barra de abas; no topo só a marca, as notícias e as fontes */
+.menu a:not(.marca, .menu-noticias, .menu-fontes) { display: none; }
+.menu .menu-noticias,
+.menu .menu-fontes {
+  font-weight: 700; font-size: 0.8125rem; text-transform: uppercase;
+  border: 2px solid var(--tinta); padding: 4px 8px; color: var(--tinta);
+}
+.menu .menu-noticias { margin-left: auto; background: var(--tinta); color: #fff; }
+/* Celular estreito: marca e botões menores para os três caberem numa linha */
+@media (max-width: 400px) {
+  .menu { padding-left: 12px; padding-right: 12px; }
+  .menu .marca { font-size: 1.05rem; padding-right: 4px; }
+  .menu .menu-noticias, .menu .menu-fontes { padding: 3px 6px; font-size: 0.75rem; }
 }
 .lateral-extra { display: none; }
+/* Barra de cima com Notícias e Fontes: só no desktop (no celular elas ficam no .menu) */
+.barra-topo { display: none; }
 
 /* Barra de abas fixa embaixo (só celular/tablet) */
 .abas {
@@ -346,6 +356,7 @@ h2 {
   display: grid; grid-template-columns: 6.5rem 1fr; gap: 10px; align-items: start;
   background: #fff; padding: 12px; border-bottom: 1px solid var(--linha); border-left: 8px solid var(--cor-borda);
 }
+.linha-tempo.datas-curtas li { grid-template-columns: 3.25rem 1fr; }
 .linha-tempo li.bolsonaro { --cor-borda: var(--bolsonaro); box-shadow: inset 4px 0 0 var(--bolsonaro-amarelo); }
 .linha-tempo li.lula { --cor-borda: var(--lula); }
 .linha-tempo .quando { font-weight: 900; font-size: 1.125rem; line-height: 1.3; }
@@ -405,6 +416,23 @@ h2 {
 /* ---------- Flávio ---------- */
 .card.fato { border-color: var(--tinta); border-left: 10px solid var(--bolsonaro); box-shadow: inset 4px 0 0 var(--bolsonaro-amarelo); }
 .fato p { color: var(--tinta-2); }
+.secao > .acoes { margin-top: 16px; }
+
+/* ---------- Notícias (noticias.html) ---------- */
+.noticia-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.noticia-meta time { font-size: 1.125rem; font-weight: 900; font-stretch: 75%; text-transform: uppercase; color: var(--tinta); }
+.etiqueta {
+  display: inline-block; padding: 1px 8px; border: 2px solid var(--tinta); background: #fff; color: var(--tinta);
+  font-size: 0.75rem; font-weight: 900; font-stretch: 80%; text-transform: uppercase; letter-spacing: 0.05em;
+}
+/* Decisão da Justiça pesa mais que acusação: etiqueta cheia */
+.etiqueta-tse { background: var(--tinta); color: #fff; }
+.noticia h3 { font-size: 1.375rem; }
+.fato p.defesa { padding: 8px 12px; background: var(--superficie-2); border-left: 4px solid var(--base); font-size: 0.9375rem; }
+.decisoes { margin: 0; padding-left: 20px; color: var(--tinta-2); font-size: 0.9375rem; }
+.decisoes li + li { margin-top: 4px; }
+.fato p.fonte-noticia { font-size: 0.875rem; color: var(--tinta-3); }
+.fonte-noticia a, .noticia .decisoes a, #desafio-sigilos .lado a, #desafio-sigilos .nota a { font-weight: 800; color: var(--tinta); }
 
 /* ---------- Mas e…? ---------- */
 .faq { display: flex; flex-direction: column; gap: 0; max-width: 760px; border-top: 2px solid var(--tinta); }
@@ -476,8 +504,9 @@ h2 {
     font-weight: 900; font-stretch: 75%; color: var(--tinta-3); min-width: 1.4em;
   }
   .topo .menu a:not(.marca):hover { background: var(--superficie-2); color: var(--tinta); }
-  .topo .menu a[aria-current="true"]:not(.marca) { border-left-color: var(--tinta); background: var(--superficie-2); color: var(--tinta); font-weight: 800; }
-  .topo .menu a[aria-current="true"]:not(.marca)::before { color: var(--tinta); }
+  .topo .menu a.menu-noticias:not(.marca) { background: transparent; color: var(--tinta); font-weight: 800; }
+  .topo .menu a[aria-current]:not(.marca) { border-left-color: var(--tinta); background: var(--superficie-2); color: var(--tinta); font-weight: 800; }
+  .topo .menu a[aria-current]:not(.marca)::before { color: var(--tinta); }
   .topo .menu a.menu-lula:not(.marca) { color: var(--lula); font-weight: 800; }
   .topo .menu a.menu-lula:not(.marca)::before { color: var(--lula); }
   .topo .menu a.menu-lula[aria-current="true"]:not(.marca) { border-left-color: var(--lula); background: var(--lula-claro); color: var(--lula-escuro); }
@@ -493,8 +522,25 @@ h2 {
   .mini-placar-nota { margin: 0 0 12px; font-size: 0.8125rem; color: var(--tinta-3); line-height: 1.35; }
   .lateral-extra .btn { width: 100%; }
 
-  main { grid-column: 2; grid-row: 1; max-width: 1040px; width: 100%; margin: 0; padding: 0 48px; }
-  .rodape { grid-column: 2; grid-row: 2; max-width: 1040px; margin: 40px 48px 0; padding: 20px 0 40px; }
+  /* Notícias e Fontes saem do menu lateral e vão para a barra de cima */
+  .topo .menu a.menu-noticias, .topo .menu a.menu-fontes { display: none; }
+  .topo { grid-row: 1 / span 3; }
+  .barra-topo {
+    grid-column: 2; grid-row: 1;
+    position: sticky; top: 0; z-index: 40;
+    display: flex; justify-content: flex-end; gap: 8px;
+    padding: 12px 48px; background: #fff; border-bottom: 2px solid var(--tinta);
+  }
+  .barra-topo a {
+    font-weight: 800; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.03em; text-decoration: none;
+    border: 2px solid var(--tinta); padding: 6px 14px; color: var(--tinta); background: #fff;
+  }
+  .barra-topo a:hover { background: var(--superficie-2); }
+  .barra-topo .barra-noticias, .barra-topo .barra-noticias:hover { background: var(--tinta); color: #fff; }
+  .barra-topo a[aria-current] { box-shadow: inset 0 -4px 0 var(--lula); }
+
+  main { grid-column: 2; grid-row: 2; max-width: 1040px; width: 100%; margin: 0; padding: 0 48px; }
+  .rodape { grid-column: 2; grid-row: 3; max-width: 1040px; margin: 40px 48px 0; padding: 20px 0 40px; }
 
   /* Topo: texto à esquerda, destaques à direita */
   .hero { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); column-gap: 40px; padding-top: 48px; }
@@ -532,6 +578,7 @@ h2 {
   .cards > .card:not(.fato) .grafico { grid-area: fig; max-width: 760px; width: 100%; justify-self: center; margin-top: 8px; }
   .cards > .card:not(.fato) > .nota { grid-area: nota; text-align: center; max-width: 72ch; justify-self: center; }
   .cards > .card:not(.fato) .card-acoes { grid-area: acoes; justify-content: center; }
+  .cards > .card:not(.fato) .linha-tempo { grid-area: fig; justify-self: center; width: 100%; max-width: 760px; margin: 8px 0 0; }
   .card:target { outline-offset: -4px; }
 
   /* Flávio: grade de fichas */
